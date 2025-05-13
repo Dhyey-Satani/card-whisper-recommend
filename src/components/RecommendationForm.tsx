@@ -1,198 +1,133 @@
 
-import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-
-interface FormValues {
-  creditScore: number;
-  annualIncome: number;
-  cardType: string;
-  features: string[];
-}
+import React from 'react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
+import { cardCategories, cardFeatures, useCardRecommendationForm } from '@/hooks/useCardRecommendationForm';
 
 interface RecommendationFormProps {
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: any) => void;
 }
 
-const RecommendationForm: React.FC<RecommendationFormProps> = ({ onSubmit }) => {
-  const [formValues, setFormValues] = useState<FormValues>({
-    creditScore: 700,
-    annualIncome: 60000,
-    cardType: 'rewards',
-    features: ['cashback', 'noFee'],
-  });
+const RecommendationForm = ({ onSubmit }: RecommendationFormProps) => {
+  const {
+    formValues,
+    handleCreditScoreChange,
+    handleAnnualIncomeChange,
+    handleCardTypeChange,
+    handleFeaturesChange,
+    toUserPreference
+  } = useCardRecommendationForm();
 
-  const handleCreditScoreChange = (value: number[]) => {
-    setFormValues({ ...formValues, creditScore: value[0] });
+  const formatIncome = (value: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(value);
   };
-
-  const handleIncomeChange = (value: number[]) => {
-    setFormValues({ ...formValues, annualIncome: value[0] * 10000 });
-  };
-
-  const handleCardTypeChange = (value: string) => {
-    setFormValues({ ...formValues, cardType: value });
-  };
-
-  const handleFeatureToggle = (feature: string) => {
-    const currentFeatures = formValues.features;
-    if (currentFeatures.includes(feature)) {
-      setFormValues({
-        ...formValues,
-        features: currentFeatures.filter(f => f !== feature),
-      });
-    } else {
-      setFormValues({
-        ...formValues,
-        features: [...currentFeatures, feature],
-      });
-    }
-  };
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formValues);
+    onSubmit(toUserPreference());
   };
 
   return (
-    <section className="w-full py-16 bg-gray-50">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-10 animate-fade-in">
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            Get Personalized Card Recommendations
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Answer a few questions about your financial situation and preferences to find the perfect credit cards for you.
-          </p>
+    <section className="py-12 px-6 bg-gray-50">
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl font-bold mb-2">Find Your Perfect Card</h2>
+          <p className="text-gray-600">Tell us about your preferences and we'll suggest the best Indian credit cards for you</p>
         </div>
-
-        <Card className="max-w-3xl mx-auto p-6 animate-slide-up">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h3 className="font-medium text-lg">Your Financial Profile</h3>
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label>Credit Score</Label>
-                    <span className="text-finance-blue-600 font-medium">{formValues.creditScore}</span>
-                  </div>
-                  <Slider
-                    value={[formValues.creditScore]}
-                    min={300}
-                    max={850}
-                    step={10}
-                    onValueChange={handleCreditScoreChange}
-                    className="py-4"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>Poor</span>
-                    <span>Fair</span>
-                    <span>Good</span>
-                    <span>Excellent</span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label>Annual Income</Label>
-                    <span className="text-finance-blue-600 font-medium">
-                      ${formValues.annualIncome.toLocaleString()}
-                    </span>
-                  </div>
-                  <Slider
-                    value={[formValues.annualIncome / 10000]}
-                    min={1}
-                    max={30}
-                    step={1}
-                    onValueChange={handleIncomeChange}
-                    className="py-4"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>$10k</span>
-                    <span>$100k</span>
-                    <span>$200k+</span>
-                  </div>
-                </div>
+        
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6">
+          <div className="space-y-8">
+            {/* Credit Score */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Your Credit Score: {formValues.creditScore}</label>
+              <Slider
+                value={[formValues.creditScore]}
+                min={300}
+                max={900}
+                step={10}
+                onValueChange={(values) => handleCreditScoreChange(values[0])}
+                className="py-4"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>Poor (300)</span>
+                <span>Fair (550)</span>
+                <span>Good (700)</span>
+                <span>Excellent (850+)</span>
               </div>
-
-              <div className="space-y-4">
-                <h3 className="font-medium text-lg">Card Preferences</h3>
-                
-                <div className="space-y-2">
-                  <Label>Card Type</Label>
-                  <Select value={formValues.cardType} onValueChange={handleCardTypeChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select card type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="rewards">Rewards</SelectItem>
-                      <SelectItem value="cashback">Cash Back</SelectItem>
-                      <SelectItem value="travel">Travel</SelectItem>
-                      <SelectItem value="business">Business</SelectItem>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="secured">Secured</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-3">
-                  <Label>Features</Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="cashback" 
-                        checked={formValues.features.includes('cashback')}
-                        onCheckedChange={() => handleFeatureToggle('cashback')}
-                      />
-                      <label htmlFor="cashback" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Cash Back
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="noFee" 
-                        checked={formValues.features.includes('noFee')}
-                        onCheckedChange={() => handleFeatureToggle('noFee')}
-                      />
-                      <label htmlFor="noFee" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        No Annual Fee
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="travelRewards" 
-                        checked={formValues.features.includes('travelRewards')}
-                        onCheckedChange={() => handleFeatureToggle('travelRewards')}
-                      />
-                      <label htmlFor="travelRewards" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Travel Rewards
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="lowInterest" 
-                        checked={formValues.features.includes('lowInterest')}
-                        onCheckedChange={() => handleFeatureToggle('lowInterest')}
-                      />
-                      <label htmlFor="lowInterest" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        Low Interest Rate
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full bg-finance-blue-600 hover:bg-finance-blue-700">
-                Find My Cards
-              </Button>
             </div>
-          </form>
-        </Card>
+            
+            {/* Annual Income */}
+            <div>
+              <label htmlFor="income" className="block text-sm font-medium mb-2">
+                Your Annual Income
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500">₹</span>
+                </div>
+                <input
+                  type="text"
+                  id="income"
+                  value={formatIncome(formValues.annualIncome).replace('₹', '')}
+                  onChange={handleAnnualIncomeChange}
+                  className="pl-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2"
+                  placeholder="Annual Income in INR"
+                />
+              </div>
+            </div>
+            
+            {/* Card Type */}
+            <div>
+              <label className="block text-sm font-medium mb-3">What type of card are you looking for?</label>
+              <RadioGroup
+                value={formValues.cardType}
+                onValueChange={handleCardTypeChange}
+                className="grid grid-cols-2 md:grid-cols-3 gap-3"
+              >
+                {cardCategories.map((category) => (
+                  <div key={category.value} className="flex items-center space-x-2">
+                    <RadioGroupItem value={category.value} id={category.value} />
+                    <label htmlFor={category.value} className="text-sm cursor-pointer">{category.label}</label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+            
+            {/* Features */}
+            <div>
+              <label className="block text-sm font-medium mb-3">Which features are important to you?</label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {cardFeatures.map((feature) => (
+                  <div key={feature.value} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`feature-${feature.value}`}
+                      checked={formValues.features.includes(feature.value)}
+                      onChange={() => handleFeaturesChange(feature.value)}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor={`feature-${feature.value}`} className="ml-2 block text-sm">
+                      {feature.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="pt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              >
+                Get My Recommendations
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </section>
   );

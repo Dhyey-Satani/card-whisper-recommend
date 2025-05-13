@@ -1,114 +1,98 @@
 
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { CreditCard, Check, Star } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { CreditCard as CreditCardIcon, IndianRupee } from 'lucide-react';
+import { CreditCardRecommendation } from '@/services/creditCardService';
 
 interface CardResultProps {
-  card: {
-    id: string;
-    name: string;
-    issuer: string;
-    matchScore: number;
-    annualFee: number;
-    introApr: string;
-    regularApr: string;
-    creditScoreReq: string;
-    rewardRate: string;
-    perks: string[];
-    imageUrl?: string;
-  };
+  card: CreditCardRecommendation;
 }
 
-const CardResult: React.FC<CardResultProps> = ({ card }) => {
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(value);
+};
+
+const CardResult = ({ card }: CardResultProps) => {
   return (
-    <Card className="w-full credit-card overflow-hidden border-2 hover:border-finance-blue-400 transition-all">
+    <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow">
       <CardHeader className="pb-3">
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-xl">{card.name}</CardTitle>
-            <CardDescription>{card.issuer}</CardDescription>
+            <CardTitle className="text-xl font-bold">{card.name}</CardTitle>
+            <CardDescription className="text-sm text-gray-500">{card.issuer}</CardDescription>
           </div>
-          <div className="gradient-bg rounded-full p-2">
-            <CreditCard className="h-6 w-6 text-white" />
+          <div className="p-2 rounded-full bg-blue-50">
+            <CreditCardIcon className="h-6 w-6 text-blue-600" />
           </div>
-        </div>
-        <div className="flex items-center gap-2 mt-2">
-          <div className="flex-1">
-            <Progress value={card.matchScore} className="h-2" />
-          </div>
-          <div className="text-sm font-medium">{card.matchScore}% match</div>
         </div>
       </CardHeader>
-      <CardContent className="pb-6">
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">Annual Fee</p>
-              <p className="font-medium">
-                {card.annualFee === 0 ? "No Fee" : `$${card.annualFee}`}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Credit Needed</p>
-              <p className="font-medium">{card.creditScoreReq}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Intro APR</p>
-              <p className="font-medium">{card.introApr}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Regular APR</p>
-              <p className="font-medium">{card.regularApr}</p>
-            </div>
-          </div>
-          
+      <CardContent className="space-y-4 pb-2">
+        <div>
+          <h3 className="text-sm font-medium text-gray-500">Key Benefits</h3>
+          <p className="text-sm mt-1">{card.reward_rate}</p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-sm text-gray-500 mb-2">Key Rewards</p>
-            <p className="font-medium">{card.rewardRate}</p>
+            <h3 className="text-xs font-medium text-gray-500">Annual Fee</h3>
+            <p className="flex items-center text-sm font-medium">
+              <IndianRupee className="h-3 w-3 mr-1" />
+              {card.annual_fee > 0 ? formatCurrency(card.annual_fee).replace('₹', '') : 'None'}
+            </p>
           </div>
-
           <div>
-            <p className="text-sm text-gray-500 mb-2">Benefits</p>
-            <div className="space-y-1.5">
-              {card.perks.slice(0, 3).map((perk, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-finance-teal-600 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">{perk}</p>
-                </div>
-              ))}
-              {card.perks.length > 3 && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="text-sm text-finance-blue-600 flex items-center gap-1 cursor-help">
-                        +{card.perks.length - 3} more benefits
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {card.perks.slice(3).map((perk, i) => (
-                        <div key={i} className="flex items-start gap-2 mb-1">
-                          <Check className="h-3 w-3 text-finance-teal-600 mt-0.5 flex-shrink-0" />
-                          <p className="text-xs">{perk}</p>
-                        </div>
-                      ))}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-            </div>
+            <h3 className="text-xs font-medium text-gray-500">Joining Fee</h3>
+            <p className="flex items-center text-sm font-medium">
+              <IndianRupee className="h-3 w-3 mr-1" />
+              {card.joining_fee > 0 ? formatCurrency(card.joining_fee).replace('₹', '') : 'None'}
+            </p>
+          </div>
+        </div>
+        
+        <div>
+          <h3 className="text-sm font-medium text-gray-500">Perks</h3>
+          <ul className="text-xs mt-1 list-disc pl-4 space-y-1">
+            {card.perks.slice(0, 3).map((perk, index) => (
+              <li key={index}>{perk}</li>
+            ))}
+            {card.perks.length > 3 && <li className="text-blue-600">+{card.perks.length - 3} more perks</li>}
+          </ul>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <h3 className="text-xs font-medium text-gray-500">Recommended Score</h3>
+            <p className="text-sm">{card.credit_score_req}</p>
+          </div>
+          <div>
+            <h3 className="text-xs font-medium text-gray-500">Regular APR</h3>
+            <p className="text-sm">{card.regular_apr}</p>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row gap-3 pt-0">
-        <Button className="w-full sm:w-auto bg-finance-blue-600 hover:bg-finance-blue-700">
-          Apply Now
-        </Button>
-        <Button variant="outline" className="w-full sm:w-auto">
-          Compare
-        </Button>
+      <CardFooter className="pt-0 pb-4">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center space-x-2">
+            {card.category.slice(0, 3).map((category, index) => (
+              <span 
+                key={index} 
+                className="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700"
+              >
+                {category}
+              </span>
+            ))}
+            {card.category.length > 3 && (
+              <span className="text-xs text-gray-500">+{card.category.length - 3}</span>
+            )}
+          </div>
+          <div className="bg-green-50 px-2 py-1 rounded-full">
+            <span className="text-xs text-green-700 font-medium">{card.match_score}% match</span>
+          </div>
+        </div>
       </CardFooter>
     </Card>
   );

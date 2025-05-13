@@ -9,13 +9,126 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      indian_credit_cards: {
+        Row: {
+          annual_fee: number
+          category: string[]
+          created_at: string
+          credit_score_req: string
+          id: string
+          image_url: string | null
+          intro_apr: string | null
+          issuer: string
+          joining_fee: number
+          name: string
+          perks: string[]
+          recommended_credit_score: number
+          recommended_income: number
+          regular_apr: string
+          reward_rate: string
+          updated_at: string
+        }
+        Insert: {
+          annual_fee: number
+          category: string[]
+          created_at?: string
+          credit_score_req: string
+          id?: string
+          image_url?: string | null
+          intro_apr?: string | null
+          issuer: string
+          joining_fee: number
+          name: string
+          perks: string[]
+          recommended_credit_score: number
+          recommended_income: number
+          regular_apr: string
+          reward_rate: string
+          updated_at?: string
+        }
+        Update: {
+          annual_fee?: number
+          category?: string[]
+          created_at?: string
+          credit_score_req?: string
+          id?: string
+          image_url?: string | null
+          intro_apr?: string | null
+          issuer?: string
+          joining_fee?: number
+          name?: string
+          perks?: string[]
+          recommended_credit_score?: number
+          recommended_income?: number
+          regular_apr?: string
+          reward_rate?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          annual_income: number
+          card_type: string
+          created_at: string
+          credit_score: number
+          features: string[]
+          id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          annual_income: number
+          card_type: string
+          created_at?: string
+          credit_score: number
+          features: string[]
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          annual_income?: number
+          card_type?: string
+          created_at?: string
+          credit_score?: number
+          features?: string[]
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_credit_card_recommendations: {
+        Args: {
+          user_credit_score: number
+          user_annual_income: number
+          user_card_type: string
+          user_features: string[]
+        }
+        Returns: {
+          id: string
+          name: string
+          issuer: string
+          annual_fee: number
+          joining_fee: number
+          reward_rate: string
+          intro_apr: string
+          regular_apr: string
+          credit_score_req: string
+          perks: string[]
+          category: string[]
+          image_url: string
+          recommended_credit_score: number
+          recommended_income: number
+          match_score: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

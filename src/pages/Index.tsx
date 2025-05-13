@@ -5,25 +5,51 @@ import Hero from '@/components/Hero';
 import RecommendationForm from '@/components/RecommendationForm';
 import CardList from '@/components/CardList';
 import Footer from '@/components/Footer';
+import { CreditCardRecommendation, getCreditCardRecommendations, saveUserPreferences } from '@/services/creditCardService';
+import { toast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [recommendations, setRecommendations] = useState<CreditCardRecommendation[]>([]);
 
-  const handleFormSubmit = (values: any) => {
+  const handleFormSubmit = async (values: any) => {
     setIsLoading(true);
     setShowResults(false);
     
-    // Simulate API call with a timeout
-    setTimeout(() => {
+    try {
+      // Save user preferences
+      await saveUserPreferences(values);
+      
+      // Get recommendations based on preferences
+      const cards = await getCreditCardRecommendations(values);
+      
+      setRecommendations(cards);
       setIsLoading(false);
       setShowResults(true);
-      // Scroll to results
-      window.scrollTo({
-        top: document.getElementById('results')?.offsetTop ?? 0,
-        behavior: 'smooth'
+      
+      if (cards.length === 0) {
+        toast({
+          title: "No recommendations found",
+          description: "Try adjusting your criteria to get better results",
+          variant: "default"
+        });
+      } else {
+        // Scroll to results
+        window.scrollTo({
+          top: document.getElementById('results')?.offsetTop ?? 0,
+          behavior: 'smooth'
+        });
+      }
+    } catch (error) {
+      console.error("Error in recommendation process:", error);
+      setIsLoading(false);
+      toast({
+        title: "Error getting recommendations",
+        description: "There was a problem processing your request. Please try again.",
+        variant: "destructive"
       });
-    }, 1500);
+    }
   };
 
   return (
@@ -33,7 +59,11 @@ const Index = () => {
         <Hero />
         <RecommendationForm onSubmit={handleFormSubmit} />
         <div id="results">
-          <CardList isLoading={isLoading} showResults={showResults} />
+          <CardList 
+            isLoading={isLoading} 
+            showResults={showResults}
+            recommendations={recommendations}
+          />
         </div>
       </main>
       <Footer />
