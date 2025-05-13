@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,31 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'finance-blue': {
+					50: '#ebf5ff',
+					100: '#e1efff',
+					200: '#c7deff',
+					300: '#a0c4ff',
+					400: '#75a3ff',
+					500: '#4a7fff',
+					600: '#2c56ff',
+					700: '#1d3eff',
+					800: '#1b34d4',
+					900: '#1c33a5',
+				},
+				'finance-teal': {
+					50: '#ebfefc',
+					100: '#d0faf6',
+					200: '#a8f2ec',
+					300: '#71e5de',
+					400: '#38cec8',
+					500: '#1cb3ad',
+					600: '#19908f',
+					700: '#1b7472',
+					800: '#1c5c5c',
+					900: '#1a4c4c',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +109,21 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(10px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'slide-up': 'slide-up 0.5s ease-out'
 			}
 		}
 	},
