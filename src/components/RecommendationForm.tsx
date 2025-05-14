@@ -3,9 +3,10 @@ import React from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { cardCategories, cardFeatures, useCardRecommendationForm } from '@/hooks/useCardRecommendationForm';
+import { UserPreference } from '@/services/creditCardService';
 
 interface RecommendationFormProps {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: UserPreference) => void;
 }
 
 const RecommendationForm = ({ onSubmit }: RecommendationFormProps) => {
