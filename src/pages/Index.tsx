@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import RecommendationForm from '@/components/RecommendationForm';
@@ -7,11 +7,28 @@ import CardList from '@/components/CardList';
 import Footer from '@/components/Footer';
 import { CreditCardRecommendation, getCreditCardRecommendations, saveUserPreferences } from '@/services/creditCardService';
 import { toast } from '@/hooks/use-toast';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+// Register ScrollToPlugin for smooth scrolling
+gsap.registerPlugin(ScrollToPlugin);
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [recommendations, setRecommendations] = useState<CreditCardRecommendation[]>([]);
+
+  // Initial page load animation
+  useEffect(() => {
+    // Animate page elements on load
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    
+    tl.fromTo(
+      "body", 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 0.5 }
+    );
+  }, []);
 
   const handleFormSubmit = async (values: any) => {
     setIsLoading(true);
@@ -35,10 +52,11 @@ const Index = () => {
           variant: "default"
         });
       } else {
-        // Scroll to results
-        window.scrollTo({
-          top: document.getElementById('results')?.offsetTop ?? 0,
-          behavior: 'smooth'
+        // Scroll to results with GSAP animation
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: "#results", offsetY: 50 },
+          ease: "power2.inOut"
         });
       }
     } catch (error) {

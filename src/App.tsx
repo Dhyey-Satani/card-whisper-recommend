@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import ComparePage from "./pages/ComparePage";
 import CreditScorePage from "./pages/CreditScorePage";
 import EducationPage from "./pages/EducationPage";
+import AnimatedLayout from "./components/AnimatedLayout";
 
 const queryClient = new QueryClient();
 
@@ -18,14 +19,16 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/compare" element={<ComparePage />} />
-          <Route path="/credit-score" element={<CreditScorePage />} />
-          <Route path="/education" element={<EducationPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedLayout>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/compare" element={<ComparePage />} />
+            <Route path="/credit-score" element={<CreditScorePage />} />
+            <Route path="/education" element={<EducationPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AnimatedLayout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
