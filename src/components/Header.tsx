@@ -1,29 +1,35 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header className="bg-white shadow-sm py-4 px-6">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-blue-600 font-bold text-xl">IndiaCardFinder</span>
+          <Link to="/" className="text-blue-600 font-bold text-xl">IndiaCardFinder</Link>
         </div>
         <nav>
           <ul className="flex space-x-6">
             <li>
-              <a href="/" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/compare" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Compare Cards
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/credit-score" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Credit Score
-              </a>
+              </Link>
+            </li>
+            <li>
+              <Link to="/education" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Education
+              </Link>
             </li>
           </ul>
         </nav>
