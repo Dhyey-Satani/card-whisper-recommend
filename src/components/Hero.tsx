@@ -1,6 +1,6 @@
-
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import CosmicNebulaMastercard from "./ui/cursor-wander-card";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -66,6 +66,16 @@ const Hero = () => {
         <p ref={paragraphRef} className="text-lg md:text-xl mb-8 text-blue-100">
           Compare top Indian credit cards and get personalized recommendations based on your spending habits and financial profile.
         </p>
+        {/* Add the cursor-wander-card here */}
+        <div className="flex justify-center my-8">
+          {/* Responsive sizing: fills 80vw on mobile, max 450px on desktop */}
+          <CosmicNebulaMastercard
+            cardholderName="YOUR NAME"
+            width="90vw"
+            height="240px"
+            className="max-w-[450px] w-full"
+          />
+        </div>
         <div ref={statsRef} className="flex flex-wrap justify-center gap-4 mb-8">
           <div className="stat-box bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-4 flex-1 min-w-[180px] max-w-[200px]">
             <h3 className="text-2xl font-bold">₹0</h3>
@@ -88,11 +98,17 @@ const Hero = () => {
             e.preventDefault();
             const form = document.querySelector('form');
             if (form) {
-              gsap.to(window, {
-                duration: 1, 
-                scrollTo: { y: form, offsetY: 50 },
-                ease: "power2.inOut"
-              });
+              // @ts-ignore
+              if (window.gsap && window.gsap.to) {
+                // @ts-ignore
+                window.gsap.to(window, {
+                  duration: 1, 
+                  scrollTo: { y: form, offsetY: 50 },
+                  ease: "power2.inOut"
+                });
+              } else {
+                form.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+              }
             }
           }}
         >
