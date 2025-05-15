@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import Hero from '@/components/Hero';
 import RecommendationForm from '@/components/RecommendationForm';
 import CardList from '@/components/CardList';
