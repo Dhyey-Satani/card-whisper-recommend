@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import CosmicNebulaMastercard from "./ui/cursor-wander-card";
@@ -8,44 +9,39 @@ const Hero = () => {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
-  
+
   useEffect(() => {
     if (!heroRef.current) return;
-    
+
     const ctx = gsap.context(() => {
-      // Timeline for sequential animations
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      
-      // Animate heading
+
       tl.fromTo(
         headingRef.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8 }
       );
-      
-      // Animate paragraph
+
       tl.fromTo(
         paragraphRef.current,
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.6 },
-        "-=0.4" // Overlap with previous animation
+        "-=0.4"
       );
-      
-      // Animate stats boxes
+
       tl.fromTo(
         ".stat-box",
         { opacity: 0, y: 30, scale: 0.9 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          scale: 1, 
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
           duration: 0.5,
-          stagger: 0.1 
+          stagger: 0.1
         },
         "-=0.3"
       );
-      
-      // Animate button
+
       tl.fromTo(
         buttonRef.current,
         { opacity: 0, y: 20 },
@@ -53,7 +49,7 @@ const Hero = () => {
         "-=0.2"
       );
     }, heroRef);
-    
+
     return () => ctx.revert();
   }, []);
 
@@ -66,14 +62,13 @@ const Hero = () => {
         <p ref={paragraphRef} className="text-lg md:text-xl mb-8 text-blue-100">
           Compare top Indian credit cards and get personalized recommendations based on your spending habits and financial profile.
         </p>
-        {/* Add the cursor-wander-card here */}
+        {/* Fixed-width card */}
         <div className="flex justify-center my-8">
-          {/* Responsive sizing: fills 80vw on mobile, max 450px on desktop */}
           <CosmicNebulaMastercard
             cardholderName="YOUR NAME"
-            width="90vw"
+            width="450px"
             height="240px"
-            className="max-w-[450px] w-full"
+            className="w-[450px] max-w-full"
           />
         </div>
         <div ref={statsRef} className="flex flex-wrap justify-center gap-4 mb-8">
@@ -90,9 +85,9 @@ const Hero = () => {
             <p className="text-sm text-blue-100">Top Indian Banks</p>
           </div>
         </div>
-        <a 
+        <a
           ref={buttonRef}
-          href="#results" 
+          href="#results"
           className="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full hover:bg-blue-50 transition-colors"
           onClick={(e) => {
             e.preventDefault();
@@ -102,7 +97,7 @@ const Hero = () => {
               if (window.gsap && window.gsap.to) {
                 // @ts-ignore
                 window.gsap.to(window, {
-                  duration: 1, 
+                  duration: 1,
                   scrollTo: { y: form, offsetY: 50 },
                   ease: "power2.inOut"
                 });
