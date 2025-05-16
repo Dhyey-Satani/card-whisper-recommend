@@ -1,189 +1,176 @@
+"use client";
 
-"use client"
-
-import * as React from "react"
-import { useState, useEffect, useRef } from "react"
-
+import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 interface CosmicNebulaMastercardProps {
-  cardholderName?: string
-  className?: string
+  cardholderName?: string;
+  className?: string;
   theme?: {
-    primaryColor?: string
-    secondaryColor?: string
-    glowColor?: string
-  }
+    primaryColor?: string;
+    secondaryColor?: string;
+    glowColor?: string;
+  };
   logoText?: {
-    topText?: string
-    bottomText?: string
-  }
-  height?: string | number
-  width?: string | number
+    topText?: string;
+    bottomText?: string;
+  };
+  height?: string | number;
+  width?: string | number;
 }
-
 const CosmicNebulaMastercard: React.FC<CosmicNebulaMastercardProps> = ({
   cardholderName = "CARDHOLDER NAME",
   className = "",
   theme = {
     primaryColor: "#0FA0CE",
     secondaryColor: "#0056b3",
-    glowColor: "rgba(15, 160, 206, 0.8)",
+    glowColor: "rgba(15, 160, 206, 0.8)"
   },
-  logoText = { topText: "NEBULA", bottomText: "FLUX" },
+  logoText = {
+    topText: "NEBULA",
+    bottomText: "FLUX"
+  },
   height = "280px",
-  width = "450px",
+  width = "450px"
 }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-  const [time, setTime] = useState(0)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const animationRef = useRef<number>(0)
-  const timeAnimationRef = useRef<number>(0)
-  const rotationRef = useRef({ x: 15, y: 20, z: 5 })
-  const rotationSpeedRef = useRef({ x: 0.2, y: 0.3, z: 0.05 })
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0
+  });
+  const [dimensions, setDimensions] = useState({
+    width: 0,
+    height: 0
+  });
+  const [isHovered, setIsHovered] = useState(false);
+  const [time, setTime] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>(0);
+  const timeAnimationRef = useRef<number>(0);
+  const rotationRef = useRef({
+    x: 15,
+    y: 20,
+    z: 5
+  });
+  const rotationSpeedRef = useRef({
+    x: 0.2,
+    y: 0.3,
+    z: 0.05
+  });
 
   // Animation loop for continuous rotation when not hovered
   const animate = () => {
-    if (!cardRef.current || isHovered) return
-
-    rotationRef.current.x += rotationSpeedRef.current.x
-    rotationRef.current.y += rotationSpeedRef.current.y
-    rotationRef.current.z += rotationSpeedRef.current.z
+    if (!cardRef.current || isHovered) return;
+    rotationRef.current.x += rotationSpeedRef.current.x;
+    rotationRef.current.y += rotationSpeedRef.current.y;
+    rotationRef.current.z += rotationSpeedRef.current.z;
 
     // Limit rotation angles to create a nice swaying effect
-    if (Math.abs(rotationRef.current.x) > 15) rotationSpeedRef.current.x *= -1
-    if (Math.abs(rotationRef.current.y) > 15) rotationSpeedRef.current.y *= -1
-    if (Math.abs(rotationRef.current.z) > 5) rotationSpeedRef.current.z *= -1
-
+    if (Math.abs(rotationRef.current.x) > 15) rotationSpeedRef.current.x *= -1;
+    if (Math.abs(rotationRef.current.y) > 15) rotationSpeedRef.current.y *= -1;
+    if (Math.abs(rotationRef.current.z) > 5) rotationSpeedRef.current.z *= -1;
     cardRef.current.style.transform = `
       rotateX(${rotationRef.current.x}deg) 
       rotateY(${rotationRef.current.y}deg) 
       rotateZ(${rotationRef.current.z}deg)
-    `
-
-    animationRef.current = requestAnimationFrame(animate)
-  }
+    `;
+    animationRef.current = requestAnimationFrame(animate);
+  };
 
   // Animation for time-based effects
   const animateTime = () => {
-    setTime((prev) => prev + 0.01)
-    timeAnimationRef.current = requestAnimationFrame(animateTime)
-  }
-
+    setTime(prev => prev + 0.01);
+    timeAnimationRef.current = requestAnimationFrame(animateTime);
+  };
   useEffect(() => {
-    const card = cardRef.current
-    if (!card) return
-
+    const card = cardRef.current;
+    if (!card) return;
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect()
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
-      const angleX = ((e.clientY - centerY) / (rect.height / 2)) * 50
-      const angleY = (-(e.clientX - centerX) / (rect.width / 2)) * 50
-
-      setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
-
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const angleX = (e.clientY - centerY) / (rect.height / 2) * 50;
+      const angleY = -(e.clientX - centerX) / (rect.width / 2) * 50;
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
       if (card) {
-        card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) rotateZ(${Math.min(Math.abs(angleX) + Math.abs(angleY), 20) / 10}deg)`
+        card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) rotateZ(${Math.min(Math.abs(angleX) + Math.abs(angleY), 20) / 10}deg)`;
       }
-    }
-
+    };
     const handleMouseEnter = () => {
-      setIsHovered(true)
-      cancelAnimationFrame(animationRef.current)
-    }
-
+      setIsHovered(true);
+      cancelAnimationFrame(animationRef.current);
+    };
     const handleMouseLeave = () => {
-      setIsHovered(false)
-      animationRef.current = requestAnimationFrame(animate)
-    }
-
+      setIsHovered(false);
+      animationRef.current = requestAnimationFrame(animate);
+    };
     const handleResize = () => {
       if (card) {
         setDimensions({
           width: card.offsetWidth,
-          height: card.offsetHeight,
-        })
+          height: card.offsetHeight
+        });
       }
-    }
-
-    handleResize()
-    animationRef.current = requestAnimationFrame(animate)
-    timeAnimationRef.current = requestAnimationFrame(animateTime)
-
-    card.addEventListener("mouseenter", handleMouseEnter)
-    card.addEventListener("mousemove", handleMouseMove)
-    card.addEventListener("mouseleave", handleMouseLeave)
-    window.addEventListener("resize", handleResize)
-
+    };
+    handleResize();
+    animationRef.current = requestAnimationFrame(animate);
+    timeAnimationRef.current = requestAnimationFrame(animateTime);
+    card.addEventListener("mouseenter", handleMouseEnter);
+    card.addEventListener("mousemove", handleMouseMove);
+    card.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("resize", handleResize);
     return () => {
-      cancelAnimationFrame(animationRef.current)
-      cancelAnimationFrame(timeAnimationRef.current)
-      card.removeEventListener("mouseenter", handleMouseEnter)
-      card.removeEventListener("mousemove", handleMouseMove)
-      card.removeEventListener("mouseleave", handleMouseLeave)
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [isHovered])
-
-  return (
-    <div ref={containerRef} className={`perspective-3000 ${className}`} style={{ perspective: "3000px" }}>
-      <div
-        ref={cardRef}
-        className="relative transition-transform hover:scale-105"
-        style={{
-          transition: "transform 0.1s ease-out",
-          transformStyle: "preserve-3d",
-          width: width,
-          height: height,
-        }}
-      >
+      cancelAnimationFrame(animationRef.current);
+      cancelAnimationFrame(timeAnimationRef.current);
+      card.removeEventListener("mouseenter", handleMouseEnter);
+      card.removeEventListener("mousemove", handleMouseMove);
+      card.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isHovered]);
+  return <div ref={containerRef} className={`perspective-3000 ${className}`} style={{
+    perspective: "3000px"
+  }}>
+      <div ref={cardRef} className="relative transition-transform hover:scale-105" style={{
+      transition: "transform 0.1s ease-out",
+      transformStyle: "preserve-3d",
+      width: width,
+      height: height
+    }}>
         {/* Card with enhanced cosmic design */}
-        <div
-          className="absolute w-full h-full rounded-3xl overflow-hidden shadow-2xl"
-          style={{
-            background: "linear-gradient(135deg, #001a33 0%, #003366 50%, #0056b3 100%)",
-            boxShadow: `0 25px 50px -12px ${theme.glowColor}`,
-          }}
-        >
+        <div style={{
+        background: "linear-gradient(135deg, #001a33 0%, #003366 50%, #0056b3 100%)",
+        boxShadow: `0 25px 50px -12px ${theme.glowColor}`
+      }} className="absolute w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-[finance-blue-200] bg-blue-950">
           {/* Enhanced cosmic background with dynamic nebula effect */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `
+          <div className="absolute inset-0" style={{
+          background: `
                 radial-gradient(circle at ${50 + Math.sin(time * 0.5) * 30}% ${50 + Math.cos(time * 0.7) * 30}%, ${theme.glowColor} 0%, transparent 70%),
                 radial-gradient(circle at ${50 + Math.cos(time * 0.3) * 40}% ${50 + Math.sin(time * 0.4) * 40}%, rgba(128, 0, 255, 0.4) 0%, transparent 60%),
                 radial-gradient(circle at ${50 + Math.sin(time * 0.6) * 35}% ${50 + Math.cos(time * 0.5) * 35}%, rgba(255, 128, 240, 0.3) 0%, transparent 55%)
               `,
-              opacity: 0.9,
-            }}
-          />
+          opacity: 0.9
+        }} />
 
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `
+          <div className="absolute inset-0" style={{
+          background: `
                 radial-gradient(ellipse at ${80 + Math.sin(time * 0.4) * 20}% ${20 + Math.cos(time * 0.3) * 20}%, rgba(15, 160, 206, 0.7) 0%, transparent 50%),
                 radial-gradient(ellipse at ${20 + Math.cos(time * 0.5) * 20}% ${70 + Math.sin(time * 0.6) * 20}%, rgba(51, 153, 255, 0.6) 0%, transparent 60%),
                 radial-gradient(ellipse at ${60 + Math.sin(time * 0.7) * 30}% ${40 + Math.cos(time * 0.8) * 30}%, rgba(0, 195, 255, 0.5) 0%, transparent 55%)
               `,
-              mixBlendMode: "screen",
-            }}
-          />
+          mixBlendMode: "screen"
+        }} />
 
           <div className="absolute inset-0 overflow-hidden">
             <div className="particles-container"></div>
           </div>
 
-          <div
-            className="absolute inset-0 animate-holographicShift"
-            style={{
-              background:
-                "linear-gradient(45deg, transparent 40%, rgba(51, 195, 240, 0.15) 45%, rgba(51, 195, 240, 0.3) 50%, rgba(51, 195, 240, 0.15) 55%, transparent 60%)",
-              backgroundSize: "200% 200%",
-            }}
-          />
+          <div className="absolute inset-0 animate-holographicShift" style={{
+          background: "linear-gradient(45deg, transparent 40%, rgba(51, 195, 240, 0.15) 45%, rgba(51, 195, 240, 0.3) 50%, rgba(51, 195, 240, 0.15) 55%, transparent 60%)",
+          backgroundSize: "200% 200%"
+        }} />
 
           <div className="absolute inset-0 overflow-hidden">
             <div className="stars-small"></div>
@@ -194,17 +181,14 @@ const CosmicNebulaMastercard: React.FC<CosmicNebulaMastercardProps> = ({
 
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative w-32 h-32 md:w-40 md:h-40">
-              <div
-                className="absolute w-full h-full animate-pulse-glow"
-                style={{
-                  background: `linear-gradient(135deg, ${theme.primaryColor} 0%, ${theme.secondaryColor} 100%)`,
-                  clipPath: "polygon(40% 0%, 60% 0%, 100% 40%, 100% 60%, 60% 100%, 40% 100%, 0% 60%, 0% 40%)",
-                  transform: "rotate(45deg)",
-                  opacity: 0.8,
-                  filter: "blur(5px)",
-                  boxShadow: `0 0 30px ${theme.glowColor}`,
-                }}
-              />
+              <div className="absolute w-full h-full animate-pulse-glow" style={{
+              background: `linear-gradient(135deg, ${theme.primaryColor} 0%, ${theme.secondaryColor} 100%)`,
+              clipPath: "polygon(40% 0%, 60% 0%, 100% 40%, 100% 60%, 60% 100%, 40% 100%, 0% 60%, 0% 40%)",
+              transform: "rotate(45deg)",
+              opacity: 0.8,
+              filter: "blur(5px)",
+              boxShadow: `0 0 30px ${theme.glowColor}`
+            }} />
             </div>
           </div>
 
@@ -223,17 +207,16 @@ const CosmicNebulaMastercard: React.FC<CosmicNebulaMastercardProps> = ({
           </div>
 
           <div className="absolute left-4 sm:left-6 top-16 sm:top-24">
-            <div
-              className="w-12 h-8 sm:w-16 sm:h-12 rounded-md opacity-90 chip-glow"
-              style={{
-                boxShadow: "0 2px 4px rgba(0,0,0,0.2), 0 0 10px rgba(51, 195, 240, 0.3)",
-                background: "linear-gradient(135deg, #d4d4d4 0%, #a0a0a0 50%, #d4d4d4 100%)",
-              }}
-            />
+            <div className="w-12 h-8 sm:w-16 sm:h-12 rounded-md opacity-90 chip-glow" style={{
+            boxShadow: "0 2px 4px rgba(0,0,0,0.2), 0 0 10px rgba(51, 195, 240, 0.3)",
+            background: "linear-gradient(135deg, #d4d4d4 0%, #a0a0a0 50%, #d4d4d4 100%)"
+          }} />
           </div>
 
           <div className="absolute bottom-4 sm:bottom-6 left-0 w-full px-4 sm:px-6">
-            <div className="text-white/80 tracking-wider text-xs sm:text-sm" style={{textShadow: "0 0 5px rgba(51, 195, 240, 0.5)"}}>{cardholderName}</div>
+            <div className="text-white/80 tracking-wider text-xs sm:text-sm" style={{
+            textShadow: "0 0 5px rgba(51, 195, 240, 0.5)"
+          }}>{cardholderName}</div>
           </div>
         </div>
       </div>
@@ -375,8 +358,6 @@ const CosmicNebulaMastercard: React.FC<CosmicNebulaMastercardProps> = ({
           100% { opacity: 0; }
         }
       `}</style>
-    </div>
-  )
-}
-
-export default CosmicNebulaMastercard
+    </div>;
+};
+export default CosmicNebulaMastercard;
