@@ -9,6 +9,9 @@ import { fetchCreditCardRecommendations, saveUserPreferences } from '@/services/
 import { useToast } from '@/components/ui/use-toast';
 import { SidebarDemo } from '@/components/SidebarDemo';
 import Header from '@/components/Header';
+import HowItWorks from '@/components/HowItWorks';
+import FeaturedBrands from '@/components/FeaturedBrands';
+import HomeFAQ from '@/components/HomeFAQ';
 
 const Index = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -57,23 +60,29 @@ const Index = () => {
       <div className="hidden md:block">
         <Header />
         <Hero />
+        <HowItWorks />
+        <FeaturedBrands />
         <RecommendationForm onSubmit={handleFormSubmit} />
         <CardList
           isLoading={isLoading}
           showResults={showResults}
           recommendations={recommendations}
         />
+        <HomeFAQ />
         <Footer />
       </div>
       {/* Show main content also on mobile/tablet (under sidebar demo) */}
       <div className="md:hidden px-2">
         <Hero />
+        <HowItWorks />
+        <FeaturedBrands />
         <RecommendationForm onSubmit={handleFormSubmit} />
         <CardList
           isLoading={isLoading}
           showResults={showResults}
           recommendations={recommendations}
         />
+        <HomeFAQ />
         <Footer />
       </div>
     </div>
