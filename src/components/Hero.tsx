@@ -1,12 +1,16 @@
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import CosmicNebulaMastercard from "./ui/cursor-wander-card";
+import CreditCard3DViewer from "./ui/CreditCard3DViewer";
+
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
+
   useEffect(() => {
     if (!heroRef.current) return;
     const ctx = gsap.context(() => {
@@ -53,7 +57,9 @@ const Hero = () => {
     }, heroRef);
     return () => ctx.revert();
   }, []);
-  return <section ref={heroRef} className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16 px-6">
+
+  return (
+    <section ref={heroRef} className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16 px-6">
       <div className="max-w-4xl mx-auto text-center">
         <h1 ref={headingRef} className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
           Find the Perfect Indian Credit Card for You
@@ -65,6 +71,14 @@ const Hero = () => {
         <div className="flex justify-center my-8 bg-transparent">
           <CosmicNebulaMastercard cardholderName="YOUR NAME" width="450px" height="240px" className="w-[450px] max-w-full" />
         </div>
+        {/* 3D: Generic Credit Card Model - high-interaction area */}
+        <CreditCard3DViewer
+          src="https://sketchfab.com/models/5de830b2cccf4fe7a2e6b400abf26ca7/embed"
+          title="Generic Credit Card 3D Model"
+          width={480}
+          height={300}
+          style={{ margin: '0 auto', background: 'white' }}
+        />
         <div ref={statsRef} className="flex flex-wrap justify-center gap-4 mb-8">
           <div className="stat-box bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-4 flex-1 min-w-[180px] max-w-[200px]">
             <h3 className="text-2xl font-bold">₹0</h3>
@@ -80,32 +94,33 @@ const Hero = () => {
           </div>
         </div>
         <a ref={buttonRef} href="#results" className="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full hover:bg-blue-50 transition-colors" onClick={e => {
-        e.preventDefault();
-        const form = document.querySelector('form');
-        if (form) {
-          // @ts-ignore
-          if (window.gsap && window.gsap.to) {
+          e.preventDefault();
+          const form = document.querySelector('form');
+          if (form) {
             // @ts-ignore
-            window.gsap.to(window, {
-              duration: 1,
-              scrollTo: {
-                y: form,
-                offsetY: 50
-              },
-              ease: "power2.inOut"
-            });
-          } else {
-            form.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "nearest"
-            });
+            if (window.gsap && window.gsap.to) {
+              // @ts-ignore
+              window.gsap.to(window, {
+                duration: 1,
+                scrollTo: {
+                  y: form,
+                  offsetY: 50
+                },
+                ease: "power2.inOut"
+              });
+            } else {
+              form.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest"
+              });
+            }
           }
-        }
-      }}>
+        }}>
           Find Your Card
         </a>
       </div>
-    </section>;
+    </section>
+  );
 };
 export default Hero;
