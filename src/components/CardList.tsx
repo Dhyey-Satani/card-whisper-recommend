@@ -3,7 +3,7 @@ import React from "react";
 import { CreditCardRecommendation } from "@/services/creditCardService";
 import CardResult from "./CardResult";
 import Footer from "./Footer";
-import CreditCard3DViewer from "./ui/CreditCard3DViewer";
+// import CreditCard3DViewer from "./ui/CreditCard3DViewer"; // No longer needed
 
 interface CardListProps {
   isLoading: boolean;
@@ -36,14 +36,7 @@ const CardList: React.FC<CardListProps> = ({
         <span className="text-red-500 mb-2 text-lg font-semibold">
           No credit card matches found.
         </span>
-        {/* 3D: Low-Poly Credit Card Model as fallback */}
-        <CreditCard3DViewer
-          src="https://sketchfab.com/models/1e46d56821a849228db92393ea690365/embed"
-          title="Low-Poly Credit Card 3D Model"
-          width={340}
-          height={220}
-          style={{ background: '#fafaf8' }}
-        />
+        {/* 3D fallback removed as requested */}
       </div>
     );
   }

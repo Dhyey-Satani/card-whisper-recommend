@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,13 +10,13 @@ import ComparePage from "./pages/ComparePage";
 import CreditScorePage from "./pages/CreditScorePage";
 import EducationPage from "./pages/EducationPage";
 import AnimatedLayout from "./components/AnimatedLayout";
-import GlobalMouseDragEffect from "@/components/ui/GlobalMouseDragEffect";
+// import GlobalMouseDragEffect from "@/components/ui/GlobalMouseDragEffect"; // removed
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <>
-    <GlobalMouseDragEffect />
+    {/* <GlobalMouseDragEffect /> removed */}
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
