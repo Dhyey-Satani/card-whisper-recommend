@@ -35,7 +35,7 @@ const RecommendationForm = ({
           <p className="text-gray-600">Tell us about your preferences and we'll suggest the best Indian credit cards for you</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6">
+        <form onSubmit={handleSubmit} className="rounded-xl shadow-md p-6 bg-[#171a26]">
           <div className="space-y-8">
             {/* Credit Score */}
             <div>
