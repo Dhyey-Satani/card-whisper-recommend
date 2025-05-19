@@ -28,14 +28,14 @@ const RecommendationForm = ({
     e.preventDefault();
     onSubmit(toUserPreference());
   };
-  return <section className="py-12 px-6 bg-[#020817]">
+  return <section className="py-12 px-6 bg-zinc-950">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8 text-center">
           <h2 className="text-2xl font-bold mb-2">Find Your Perfect Card</h2>
           <p className="text-gray-600">Tell us about your preferences and we'll suggest the best Indian credit cards for you</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="rounded-xl shadow-md p-6 bg-[#171a26]">
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6">
           <div className="space-y-8">
             {/* Credit Score */}
             <div>
