@@ -30,19 +30,19 @@ const brands = [
 ];
 
 const FeaturedBrands = () => (
-  <section className="py-12 bg-gradient-to-r from-[#e3f0ff] to-[#f1f9ff]">
+  <section className="py-12 bg-background transition-colors">
     <div className="max-w-5xl mx-auto text-center mb-5">
-      <h2 className="text-2xl md:text-3xl font-bold mb-3">Featured Card Brands</h2>
-      <p className="text-gray-600 text-base mb-5">Compare top cards from leading Indian & global banks.</p>
+      <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">Featured Card Brands</h2>
+      <p className="text-muted-foreground text-base mb-5">Compare top cards from leading Indian & global banks.</p>
     </div>
     <div className="max-w-4xl mx-auto">
       <Carousel opts={{ align: "center", loop: true }}>
         <CarouselContent>
           {brands.map((brand, i) => (
             <CarouselItem key={brand.name} className="basis-1/2 md:basis-1/4 flex justify-center items-center">
-              <div className="bg-white rounded-lg shadow p-5 flex flex-col items-center transition-transform hover:scale-105">
+              <div className="bg-card rounded-lg shadow p-5 flex flex-col items-center transition-transform hover:scale-105">
                 <img src={brand.logo} alt={brand.name} className="h-12 w-auto object-contain mb-2" />
-                <span className="text-xs font-medium text-gray-700">{brand.name}</span>
+                <span className="text-xs font-medium text-muted-foreground">{brand.name}</span>
               </div>
             </CarouselItem>
           ))}
