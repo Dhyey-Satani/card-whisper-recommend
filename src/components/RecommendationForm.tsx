@@ -28,7 +28,7 @@ const RecommendationForm = ({
     e.preventDefault();
     onSubmit(toUserPreference());
   };
-  return <section className="py-12 px-6 bg-zinc-950">
+  return <section className="py-12 px-6 bg-[#020817]">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8 text-center">
           <h2 className="text-2xl font-bold mb-2">Find Your Perfect Card</h2>
