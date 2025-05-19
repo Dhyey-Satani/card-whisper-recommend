@@ -1,35 +1,40 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ThemeSelector } from './theme/ThemeSelector';
 
 const Header = () => {
   return (
-    <header className="bg-white shadow-sm py-4 px-6">
+    <header className="bg-white dark:bg-neutral-900 shadow-sm py-4 px-6 transition-colors duration-300">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <Link to="/" className="text-blue-600 font-bold text-xl">IndiaCardFinder</Link>
+          <Link to="/" className="text-blue-600 dark:text-primary font-bold text-xl transition-colors">IndiaCardFinder</Link>
         </div>
         <nav>
-          <ul className="flex space-x-6">
+          <ul className="flex space-x-6 items-center">
             <li>
-              <Link to="/" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/" className="text-gray-600 dark:text-gray-100 hover:text-blue-600 hover:dark:text-primary transition-colors">
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/compare" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/compare" className="text-gray-600 dark:text-gray-100 hover:text-blue-600 hover:dark:text-primary transition-colors">
                 Compare Cards
               </Link>
             </li>
             <li>
-              <Link to="/credit-score" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/credit-score" className="text-gray-600 dark:text-gray-100 hover:text-blue-600 hover:dark:text-primary transition-colors">
                 Credit Score
               </Link>
             </li>
             <li>
-              <Link to="/education" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to="/education" className="text-gray-600 dark:text-gray-100 hover:text-blue-600 hover:dark:text-primary transition-colors">
                 Education
               </Link>
+            </li>
+            <li>
+              {/* Theme selector */}
+              <ThemeSelector />
             </li>
           </ul>
         </nav>

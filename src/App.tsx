@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,12 +9,12 @@ import ComparePage from "./pages/ComparePage";
 import CreditScorePage from "./pages/CreditScorePage";
 import EducationPage from "./pages/EducationPage";
 import AnimatedLayout from "./components/AnimatedLayout";
-// import GlobalMouseDragEffect from "@/components/ui/GlobalMouseDragEffect"; // removed
+import { ThemeProvider } from "./components/theme/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <>
+  <ThemeProvider>
     {/* <GlobalMouseDragEffect /> removed */}
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -35,7 +34,7 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
-  </>
+  </ThemeProvider>
 );
 
 export default App;
