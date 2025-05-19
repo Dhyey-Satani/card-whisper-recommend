@@ -58,7 +58,7 @@ const RecommendationForm = ({
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span className="text-gray-500">₹</span>
                 </div>
-                <input type="text" id="income" value={formatIncome(formValues.annualIncome).replace('₹', '')} onChange={handleAnnualIncomeChange} className="pl-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="Annual Income in INR" />
+                <input type="text" id="income" value={formatIncome(formValues.annualIncome).replace('₹', '')} onChange={handleAnnualIncomeChange} placeholder="Annual Income in INR" className="pl-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2 text-black-800" />
               </div>
             </div>
             
