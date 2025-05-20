@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { cardCategories, cardFeatures, useCardRecommendationForm } from '@/hooks/useCardRecommendationForm';
 import { UserPreference } from '@/services/creditCardService';
+import gsap from "gsap";
 
 interface RecommendationFormProps {
   onSubmit: (values: UserPreference) => void;
@@ -19,6 +20,56 @@ const RecommendationForm = ({
     handleFeaturesChange,
     toUserPreference
   } = useCardRecommendationForm();
+
+  // Refs for micro-interaction
+  const radioRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const checkboxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sliderThumbRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Animate radio group on mount
+    gsap.fromTo(
+      radioRefs.current,
+      { scale: 0.8, opacity: 0.4 },
+      {
+        scale: 1,
+        opacity: 1,
+        stagger: 0.06,
+        duration: 0.19,
+        delay: 0.05,
+        ease: "back.out(2)"
+      }
+    );
+    // Animate checkboxes on mount
+    gsap.fromTo(
+      checkboxRefs.current,
+      { scale: 0.8, opacity: 0.5 },
+      {
+        scale: 1,
+        opacity: 1,
+        stagger: 0.04,
+        duration: 0.2,
+        delay: 0.08,
+        ease: "back.out(2.2)"
+      }
+    );
+    // Animate slider thumb on mount
+    if (sliderThumbRef.current) {
+      gsap.fromTo(
+        sliderThumbRef.current,
+        { scale: 1, boxShadow: "0 0 0 0px #9b87f580" },
+        {
+          scale: 1.1,
+          boxShadow: "0 0 0 8px #9b87f580",
+          yoyo: true,
+          repeat: 1,
+          duration: 0.38,
+          ease: "expo.inOut"
+        }
+      );
+    }
+  }, []);
+
   const formatIncome = (value: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -43,7 +94,17 @@ const RecommendationForm = ({
             {/* Credit Score */}
             <div>
               <label className="block text-sm font-medium mb-2 text-foreground">Your Credit Score: {formValues.creditScore}</label>
-              <Slider value={[formValues.creditScore]} min={300} max={900} step={10} onValueChange={values => handleCreditScoreChange(values[0])} className="py-4" />
+              <Slider
+                value={[formValues.creditScore]}
+                min={300}
+                max={900}
+                step={10}
+                onValueChange={values => handleCreditScoreChange(values[0])}
+                className="py-4"
+                thumbProps={{
+                  ref: sliderThumbRef
+                }}
+              />
               <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>Poor (300)</span>
                 <span>Fair (550)</span>
@@ -76,8 +137,12 @@ const RecommendationForm = ({
             <div>
               <label className="block text-sm font-medium mb-3 text-foreground">What type of card are you looking for?</label>
               <RadioGroup value={formValues.cardType} onValueChange={handleCardTypeChange} className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {cardCategories.map(category => (
-                  <div key={category.value} className="flex items-center space-x-2">
+                {cardCategories.map((category, idx) => (
+                  <div
+                    ref={el => radioRefs.current[idx] = el}
+                    key={category.value}
+                    className="flex items-center space-x-2 transition-transform duration-150"
+                  >
                     <RadioGroupItem value={category.value} id={category.value} />
                     <label htmlFor={category.value} className="text-sm cursor-pointer text-foreground">{category.label}</label>
                   </div>
@@ -89,8 +154,12 @@ const RecommendationForm = ({
             <div>
               <label className="block text-sm font-medium mb-3 text-foreground">Which features are important to you?</label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {cardFeatures.map(feature => (
-                  <div key={feature.value} className="flex items-center">
+                {cardFeatures.map((feature, idx) => (
+                  <div
+                    ref={el => checkboxRefs.current[idx] = el}
+                    key={feature.value}
+                    className="flex items-center transition-transform duration-150"
+                  >
                     <input
                       type="checkbox"
                       id={`feature-${feature.value}`}
