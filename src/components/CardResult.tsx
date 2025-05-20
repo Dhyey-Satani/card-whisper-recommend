@@ -6,6 +6,8 @@ import gsap from 'gsap';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import LazyLoad from 'react-lazyload';
 import PlaceholderCardImage from './ui/PlaceholderCardImage';
+import AnimatedCardPlaceholder from './ui/AnimatedCardPlaceholder';
+import { useImageStatus } from '@/hooks/useImageStatus';
 
 interface CardResultProps {
   card: CreditCardRecommendation;
@@ -89,41 +91,19 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
     };
   }, [index]);
 
+  // Enhanced card image status handlers for progressive loading
+  const imageStatus = useImageStatus(card.image_url);
+
   // Separate error for front and back face
   const [imgError, setImgError] = useState(false);
   const [backImgError, setBackImgError] = useState(false);
 
-  const renderCardImage = (isBack = false) => {
-    const imageUrl = card.image_url;
-
-    if (!imageUrl || (isBack ? backImgError : imgError)) {
-      // Use realistic SVG with more detail on back
-      return (
-        <PlaceholderCardImage
-          bankName={card.issuer}
-          cardType={card.name}
-          variant={isBack ? "back" : "front"}
-          width="100%"
-          height={170}
-          theme={theme}
-          mode="realistic"
-        />
-      );
-    }
-    return (
-      <LazyLoad height={170} offset={100} once>
-        <img
-          src={imageUrl}
-          width="100%"
-          height={170}
-          alt={`${card.name} ${isBack ? "Back" : "Card"}`}
-          className="rounded-lg w-full object-cover shadow"
-          style={{ maxHeight: 170, minHeight: 120, background: "#f1f0fb" }}
-          loading="lazy"
-          onError={() => (isBack ? setBackImgError(true) : setImgError(true))}
-        />
-      </LazyLoad>
-    );
+  // Brand color utility (optional, you can expand as needed)
+  const getBrandColor = (issuer: string) => {
+    const colors: Record<string, string> = {
+      'HDFC': "#7e69ab", 'ICICI': "#ef7e25", 'SBI': "#1b34d4", 'Axis': "#d946ef"
+    };
+    return colors[issuer] || "#9b87f5";
   };
 
   // Function to handle card flip
@@ -150,6 +130,36 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
     });
   };
 
+  // Progressive Image Loader with fallback:
+  const renderCardImage = (isBack = false) => {
+    // Render animated placeholder if loading or error
+    if (imageStatus === "loading" || !card.image_url || imageStatus === "error") {
+      return (
+        <AnimatedCardPlaceholder
+          bankName={card.issuer}
+          cardType={card.name}
+          brandColor={getBrandColor(card.issuer)}
+          width="100%"
+          height={170}
+          theme={theme}
+          animate={imageStatus === "loading"}
+        />
+      );
+    }
+    // Normal image with soft fade-in animation
+    return (
+      <img
+        src={card.image_url!}
+        width="100%"
+        height={170}
+        alt={`${card.name} ${isBack ? "Back" : "Card"}`}
+        className={`rounded-lg w-full object-cover shadow transition-opacity duration-700 ${imageStatus === "loaded" ? "opacity-100" : "opacity-0"}`}
+        style={{ maxHeight: 170, minHeight: 120, background: "#f1f0fb" }}
+        loading="lazy"
+      />
+    );
+  };
+
   return (
     <div 
       ref={cardRef} 
@@ -171,7 +181,6 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
                 <CardDescription className="text-sm text-gray-500">{card.issuer}</CardDescription>
               </div>
               <div className="p-2 rounded-md bg-blue-50 flex items-center h-[54px] w-[92px]">
-                {/* Realistic card image or fallback placeholder */}
                 {renderCardImage(false)}
               </div>
             </div>
@@ -262,7 +271,6 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
                 <CardDescription className="text-blue-100">{card.issuer}</CardDescription>
               </div>
               <div className="rounded-md bg-blue-900 flex items-center h-[54px] w-[92px]">
-                {/* Backside image or fallback placeholder (now visually realistic) */}
                 {renderCardImage(true)}
               </div>
             </div>
