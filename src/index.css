@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +7,27 @@
 html,
 body {
   transition: background 0.3s, color 0.3s;
+}
+
+/* THEME RIPPLE effect - for mode toggle */
+:root {
+  --theme-ripple-x: 0;
+  --theme-ripple-y: 0;
+}
+.theme-ripple-animate::before {
+  content: "";
+  z-index: 9998;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  --size: 0;
+  animation: themeRipple 0.68s cubic-bezier(0.3, 1, 0.7, 1) forwards;
+  background: radial-gradient(circle at var(--theme-ripple-x) var(--theme-ripple-y),rgba(155,135,245,0.11) 0%,rgba(155,135,245,0.21) 40%,rgba(60,60,80,.54) 86%,rgba(44,20,64,.7) 98%,transparent 100%);
+}
+@keyframes themeRipple {
+  0% { opacity: 1; transform: scale(0.01); }
+  80% { opacity: 0.98; transform: scale(1.11); }
+  100% { opacity: 0; transform: scale(2.35); }
 }
 
 @layer base {

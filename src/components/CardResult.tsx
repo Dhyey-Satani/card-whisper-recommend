@@ -30,6 +30,13 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
   const [theme, setTheme] = useState<'light' | 'dark'>(
     document.documentElement.classList.contains('dark') ? 'dark' : 'light'
   );
+  useEffect(() => {
+    const docEl = document.documentElement;
+    const updateTheme = () => setTheme(docEl.classList.contains('dark') ? 'dark' : 'light');
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(docEl, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Entry animation
   useEffect(() => {
@@ -82,15 +89,15 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
     };
   }, [index]);
 
-  // Helper for fallback to realistic placeholder
+  // Separate error for front and back face
   const [imgError, setImgError] = useState(false);
   const [backImgError, setBackImgError] = useState(false);
 
   const renderCardImage = (isBack = false) => {
-    // Only use card.image_url, as that's the only available prop
     const imageUrl = card.image_url;
 
     if (!imageUrl || (isBack ? backImgError : imgError)) {
+      // Use realistic SVG with more detail on back
       return (
         <PlaceholderCardImage
           bankName={card.issuer}
@@ -99,10 +106,10 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
           width="100%"
           height={170}
           theme={theme}
+          mode="realistic"
         />
       );
     }
-    // Progressive load with react-lazyload and error handling
     return (
       <LazyLoad height={170} offset={100} once>
         <img
@@ -122,21 +129,20 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
   // Function to handle card flip
   const handleCardFlip = () => {
     if (!cardRef.current || !frontRef.current || !backRef.current) return;
-    
     isFlipped.current = !isFlipped.current;
-    
+
     gsap.to(cardRef.current, {
       rotationY: isFlipped.current ? 180 : 0,
       duration: 0.6,
       ease: "power1.inOut"
     });
-    
+
     gsap.to(frontRef.current, {
       opacity: isFlipped.current ? 0 : 1,
       duration: 0.3,
       delay: isFlipped.current ? 0 : 0.3
     });
-    
+
     gsap.to(backRef.current, {
       opacity: isFlipped.current ? 1 : 0,
       duration: 0.3,
@@ -256,7 +262,7 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
                 <CardDescription className="text-blue-100">{card.issuer}</CardDescription>
               </div>
               <div className="rounded-md bg-blue-900 flex items-center h-[54px] w-[92px]">
-                {/* Backside image or fallback */}
+                {/* Backside image or fallback placeholder (now visually realistic) */}
                 {renderCardImage(true)}
               </div>
             </div>

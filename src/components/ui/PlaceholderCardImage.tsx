@@ -8,6 +8,7 @@ interface PlaceholderCardImageProps {
   width?: number | string;
   height?: number | string;
   theme?: "light" | "dark";
+  mode?: "realistic";
 }
 const gradientLight = "linear-gradient(135deg, #c7deff 0%, #d6bcfa 100%)";
 const gradientDark = "linear-gradient(135deg, #2c56ff 0%, #6e59a5 100%)";
@@ -22,10 +23,12 @@ const PlaceholderCardImage: React.FC<PlaceholderCardImageProps> = ({
   width = 390,
   height = 210,
   theme = "light",
+  mode = undefined
 }) => {
   const isFront = variant === "front";
   const gradient = theme === "dark" ? gradientDark : gradientLight;
   const chip = theme === "dark" ? chipColorDark : chipColorLight;
+
   return (
     <svg
       width={width}
@@ -65,41 +68,42 @@ const PlaceholderCardImage: React.FC<PlaceholderCardImageProps> = ({
           <stop offset="1" stopColor={theme === "dark" ? "#9b87f5" : "#d6bcfa"} />
         </linearGradient>
       </defs>
-      {/* Card chip */}
-      {isFront && (
-        <rect
-          x={34}
-          y={38}
-          rx={6}
-          width={38}
-          height={28}
-          fill={chip}
-          stroke="#6767ac"
-          strokeWidth={2}
-          opacity={0.9}
-        />
-      )}
-      {/* Branded logo (circle & gradient) */}
-      {isFront && (
-        <g>
-          <circle cx={55} cy={170} r={20} fill="#9b87f5" opacity={0.33} />
-          <circle cx={85} cy={170} r={20} fill="#f2fce2" opacity={0.25} />
-          <circle cx={342} cy={44} r={14} fill="#d946ef" opacity={0.18} />
-        </g>
-      )}
-      {/* Card number or magnetic line/back details */}
+
+      {/* Front/Back realistic features */}
       {isFront ? (
-        <g>
+        <>
+          {/* Card chip */}
+          <rect
+            x={34}
+            y={38}
+            rx={6}
+            width={38}
+            height={28}
+            fill={chip}
+            stroke="#6767ac"
+            strokeWidth={2}
+            opacity={0.9}
+          />
+          <g>
+            <circle cx={55} cy={170} r={20} fill="#9b87f5" opacity={0.33} />
+            <circle cx={85} cy={170} r={20} fill="#f2fce2" opacity={0.25} />
+            <circle cx={342} cy={44} r={14} fill="#d946ef" opacity={0.18} />
+          </g>
+          {/* Card number & title */}
           <rect x={36} y={101} rx={10} width={215} height={16} fill="#fff6" />
           <rect x={36} y={126} rx={5} width={92} height={14} fill="#f3f3f3" />
-        </g>
+        </>
       ) : (
-        <g>
-          {/* Magnetic stripe */}
-          <rect x={0} y={34} width={390} height={28} rx={4} fill="#333" opacity={0.7}/>
-          {/* Mini signature block */}
+        <>
+          {/* Magnetic stripe (realistic) */}
+          <rect x={0} y={34} width={390} height={28} rx={4} fill="#2a2a33" opacity="0.85" />
+          <rect x={30} y={75} rx={12} width={310} height={16} fill="#38385d" opacity="0.4" />
+          <rect x={36} y={110} width={70} height={14} rx={3} fill="#cec" opacity="0.32" />
+          {/* Signature + CVC highlights */}
           <rect x={278} y={120} rx={3} width={74} height={14} fill="#fff" opacity={0.8} />
-        </g>
+          {/* Back CVC block */}
+          <rect x={360} y={170} width={20} height={16} rx={3} fill="#f1f0fb" stroke="#aaa" strokeWidth={1} />
+        </>
       )}
       {/* Bank name */}
       <text
@@ -137,38 +141,27 @@ const PlaceholderCardImage: React.FC<PlaceholderCardImageProps> = ({
           AUTHORIZED SIGNATURE
         </text>
       )}
-      {/* Placeholder Mastercard circles */}
+      {/* Master circles & brand */}
       {isFront && (
         <>
           <circle cx={340} cy={180} r={20} fill="#d946ef" opacity={0.27}/>
           <circle cx={360} cy={180} r={20} fill="#e5deff" opacity={0.19}/>
         </>
       )}
-      {/* Card branding text/back code */}
-      <text
-        x={isFront ? 335 : 350}
-        y={isFront ? 72 : 198}
-        fontFamily="Inter, Arial,sans-serif"
-        fontWeight={isFront ? 800 : 500}
-        fontSize={isFront ? 10 : 13}
-        fill={isFront ? "#7e69ab" : "#888"}
-        opacity="0.75"
-        textAnchor="end"
-      >
-        {isFront ? "INDIA CARD FINDER" : ""}
-      </text>
-      {/* Backside CVC block */}
-      {!isFront && (
-        <rect
-          x={360}
-          y={170}
-          width={20}
-          height={16}
-          rx={3}
-          fill="#f1f0fb"
-          stroke="#aaa"
-          strokeWidth={1}
-        />
+      {/* India Card Finder - only front */}
+      {isFront && (
+        <text
+          x={335}
+          y={72}
+          fontFamily="Inter, Arial,sans-serif"
+          fontWeight={800}
+          fontSize={10}
+          fill="#7e69ab"
+          opacity="0.75"
+          textAnchor="end"
+        >
+          INDIA CARD FINDER
+        </text>
       )}
     </svg>
   );

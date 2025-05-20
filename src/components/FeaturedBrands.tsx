@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import PlaceholderBrandLogo from "./ui/PlaceholderBrandLogo";
 
 const brands = [
   {
@@ -41,7 +42,11 @@ const FeaturedBrands = () => (
           {brands.map((brand, i) => (
             <CarouselItem key={brand.name} className="basis-1/2 md:basis-1/4 flex justify-center items-center">
               <div className="bg-card rounded-lg shadow p-5 flex flex-col items-center transition-transform hover:scale-105">
-                <img src={brand.logo} alt={brand.name} className="h-12 w-auto object-contain mb-2" />
+                {brand.logo ? (
+                  <img src={brand.logo} alt={brand.name} className="h-12 w-auto object-contain mb-2" />
+                ) : (
+                  <PlaceholderBrandLogo bankName={brand.name} />
+                )}
                 <span className="text-xs font-medium text-muted-foreground">{brand.name}</span>
               </div>
             </CarouselItem>
@@ -55,3 +60,4 @@ const FeaturedBrands = () => (
 );
 
 export default FeaturedBrands;
+
