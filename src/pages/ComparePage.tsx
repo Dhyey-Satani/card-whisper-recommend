@@ -21,33 +21,33 @@ const ComparePage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background transition-colors">
       <Header />
-      <main className="flex-grow py-10 px-4 md:px-6 bg-gray-50">
+      <main className="flex-grow py-10 px-4 md:px-6 bg-background transition-colors">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6">Compare Credit Cards</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-3xl font-bold mb-6 text-foreground">Compare Credit Cards</h1>
+          <p className="text-muted-foreground mb-8">
             Compare features, benefits, and fees of popular Indian credit cards side by side.
           </p>
 
           <div className="grid gap-6">
             {comparisonItems.map((item, index) => (
-              <Card key={index} className="overflow-hidden">
-                <CardHeader className="bg-blue-50">
+              <Card key={index} className="overflow-hidden bg-card border border-border shadow-md transition-colors">
+                <CardHeader className="bg-secondary/10 dark:bg-secondary/20">
                   <div className="flex flex-col md:flex-row justify-between items-center">
-                    <CardTitle className="text-center md:text-left">{item.card1}</CardTitle>
-                    <ArrowRight className="hidden md:block text-gray-400" />
-                    <CardTitle className="text-center md:text-left mt-2 md:mt-0">{item.card2}</CardTitle>
+                    <CardTitle className="text-center md:text-left text-foreground">{item.card1}</CardTitle>
+                    <ArrowRight className="hidden md:block text-muted-foreground" />
+                    <CardTitle className="text-center md:text-left mt-2 md:mt-0 text-foreground">{item.card2}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
                   <table className="w-full">
                     <tbody>
                       {item.features.map((feature, featureIndex) => (
-                        <tr key={featureIndex} className={featureIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                          <td className="py-4 px-6 font-medium">{feature.name}</td>
-                          <td className="py-4 px-6">{feature.value1}</td>
-                          <td className="py-4 px-6">{feature.value2}</td>
+                        <tr key={featureIndex} className={featureIndex % 2 === 0 ? "bg-background" : "bg-muted"}>
+                          <td className="py-4 px-6 font-medium text-foreground">{feature.name}</td>
+                          <td className="py-4 px-6 text-foreground">{feature.value1}</td>
+                          <td className="py-4 px-6 text-foreground">{feature.value2}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -58,8 +58,8 @@ const ComparePage = () => {
           </div>
 
           <div className="mt-10">
-            <h2 className="text-2xl font-bold mb-4">Want to compare other cards?</h2>
-            <p className="mb-4">Our comparison tool will be available soon. Check back for updates!</p>
+            <h2 className="text-2xl font-bold mb-4 text-foreground">Want to compare other cards?</h2>
+            <p className="mb-4 text-muted-foreground">Our comparison tool will be available soon. Check back for updates!</p>
           </div>
         </div>
       </main>

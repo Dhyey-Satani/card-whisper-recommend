@@ -57,30 +57,28 @@ const CreditScorePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background transition-colors">
       <Header />
-      <main className="flex-grow py-12 px-4 md:px-6 bg-gray-50">
+      <main className="flex-grow py-12 px-4 md:px-6 bg-background transition-colors">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold mb-2">Check Your Credit Score</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold mb-2 text-foreground">Check Your Credit Score</h1>
+            <p className="text-muted-foreground">
               Know your eligibility for the best credit cards in India with a free credit score check
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2">
+            <Card className="lg:col-span-2 bg-card border border-border shadow-md transition-colors">
               <CardHeader>
-                <CardTitle>Get Your Free Credit Score</CardTitle>
-                <CardDescription>
-                  Fill in your details below to check your credit score instantly
-                </CardDescription>
+                <CardTitle className="text-foreground">Get Your Free Credit Score</CardTitle>
+                <CardDescription>Fill in your details below to check your credit score instantly</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
+                      <Label htmlFor="name" className="text-foreground">Full Name</Label>
                       <Input 
                         id="name" 
                         name="name" 
@@ -88,10 +86,11 @@ const CreditScorePage = () => {
                         placeholder="Enter your full name" 
                         value={formData.name}
                         onChange={handleInputChange}
+                        className="bg-background text-foreground transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone" className="text-foreground">Phone Number</Label>
                       <Input 
                         id="phone" 
                         name="phone" 
@@ -99,13 +98,14 @@ const CreditScorePage = () => {
                         placeholder="Enter your phone number" 
                         value={formData.phone}
                         onChange={handleInputChange}
+                        className="bg-background text-foreground transition-colors"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email Address</Label>
+                      <Label htmlFor="email" className="text-foreground">Email Address</Label>
                       <Input 
                         id="email" 
                         name="email" 
@@ -114,10 +114,11 @@ const CreditScorePage = () => {
                         placeholder="Enter your email address" 
                         value={formData.email}
                         onChange={handleInputChange}
+                        className="bg-background text-foreground transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="pan">PAN Number</Label>
+                      <Label htmlFor="pan" className="text-foreground">PAN Number</Label>
                       <Input 
                         id="pan" 
                         name="pan" 
@@ -125,6 +126,7 @@ const CreditScorePage = () => {
                         placeholder="Enter your PAN number" 
                         value={formData.pan}
                         onChange={handleInputChange}
+                        className="bg-background text-foreground transition-colors"
                       />
                     </div>
                   </div>
@@ -134,7 +136,7 @@ const CreditScorePage = () => {
                   </Button>
                 </form>
               </CardContent>
-              <CardFooter className="text-sm text-gray-500">
+              <CardFooter className="text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <ShieldCheck size={16} className="mr-2" />
                   <span>Your information is secure and will not be shared</span>
@@ -142,30 +144,30 @@ const CreditScorePage = () => {
               </CardFooter>
             </Card>
 
-            <Card>
+            <Card className="bg-card border border-border shadow-md transition-colors">
               <CardHeader>
-                <CardTitle>Why Check Your Score?</CardTitle>
+                <CardTitle className="text-foreground">Why Check Your Score?</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start">
-                  <Shield className="mr-2 text-blue-500" size={20} />
+                  <Shield className="mr-2 text-primary" size={20} />
                   <div>
-                    <h3 className="font-medium">Get the Right Card</h3>
-                    <p className="text-sm text-gray-600">Know which cards you're likely to be approved for</p>
+                    <h3 className="font-medium text-foreground">Get the Right Card</h3>
+                    <p className="text-sm text-muted-foreground">Know which cards you're likely to be approved for</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <Shield className="mr-2 text-blue-500" size={20} />
+                  <Shield className="mr-2 text-primary" size={20} />
                   <div>
-                    <h3 className="font-medium">No Impact on Score</h3>
-                    <p className="text-sm text-gray-600">This is a soft check that won't affect your score</p>
+                    <h3 className="font-medium text-foreground">No Impact on Score</h3>
+                    <p className="text-sm text-muted-foreground">This is a soft check that won't affect your score</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <Shield className="mr-2 text-blue-500" size={20} />
+                  <Shield className="mr-2 text-primary" size={20} />
                   <div>
-                    <h3 className="font-medium">Completely Free</h3>
-                    <p className="text-sm text-gray-600">No hidden charges or subscription fees</p>
+                    <h3 className="font-medium text-foreground">Completely Free</h3>
+                    <p className="text-sm text-muted-foreground">No hidden charges or subscription fees</p>
                   </div>
                 </div>
               </CardContent>
@@ -173,14 +175,14 @@ const CreditScorePage = () => {
           </div>
 
           {creditScore !== null && (
-            <Card className="mt-8">
-              <CardHeader className="bg-blue-50">
-                <CardTitle>Your Credit Score Result</CardTitle>
+            <Card className="mt-8 bg-card border border-border shadow-md transition-colors">
+              <CardHeader className="bg-secondary/10 dark:bg-secondary/20">
+                <CardTitle className="text-foreground">Your Credit Score Result</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="text-center">
-                  <div className="text-6xl font-bold mb-4">{creditScore}</div>
-                  <p className="text-lg">
+                  <div className="text-6xl font-bold mb-4 text-foreground">{creditScore}</div>
+                  <p className="text-lg text-foreground">
                     {creditScore < 600 ? 'Poor' : 
                      creditScore < 700 ? 'Fair' :
                      creditScore < 750 ? 'Good' :
