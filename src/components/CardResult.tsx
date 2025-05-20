@@ -1,9 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CreditCard as CreditCardIcon, IndianRupee } from 'lucide-react';
 import { CreditCardRecommendation } from '@/services/creditCardService';
 import gsap from 'gsap';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import LazyLoad from 'react-lazyload';
+import PlaceholderCardImage from './ui/PlaceholderCardImage';
 
 interface CardResultProps {
   card: CreditCardRecommendation;
@@ -23,6 +25,20 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
   const frontRef = useRef<HTMLDivElement>(null);
   const backRef = useRef<HTMLDivElement>(null);
   const isFlipped = useRef(false);
+
+  // NEW: For tracking fallback
+  const [imgError, setImgError] = useState(false);
+  const [backImgError, setBackImgError] = useState(false);
+  const [theme, setTheme] = useState(
+    document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+  );
+  useEffect(() => {
+    const docEl = document.documentElement;
+    const updateTheme = () => setTheme(docEl.classList.contains('dark') ? 'dark' : 'light');
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(docEl, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Entry animation
   useEffect(() => {
@@ -75,6 +91,42 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
     };
   }, [index]);
 
+  // Helper for fallback to realistic placeholder
+  const renderCardImage = (isBack = false) => {
+    const imageUrl = !isBack
+      ? card.image_url
+      : card.back_image_url || card.image_url;
+
+    // If no image or error, show placeholder
+    if (!imageUrl || (isBack ? backImgError : imgError)) {
+      return (
+        <PlaceholderCardImage
+          bankName={card.issuer}
+          cardType={card.name}
+          variant={isBack ? "back" : "front"}
+          width="100%"
+          height={170}
+          theme={theme}
+        />
+      );
+    }
+    // Progressive load with react-lazyload and error handling
+    return (
+      <LazyLoad height={170} offset={100} once>
+        <img
+          src={imageUrl}
+          width="100%"
+          height={170}
+          alt={`${card.name} ${isBack ? "Back" : "Card"}`}
+          className="rounded-lg w-full object-cover shadow"
+          style={{ maxHeight: 170, minHeight: 120, background: "#f1f0fb" }}
+          loading="lazy"
+          onError={() => (isBack ? setBackImgError(true) : setImgError(true))}
+        />
+      </LazyLoad>
+    );
+  };
+
   // Function to handle card flip
   const handleCardFlip = () => {
     if (!cardRef.current || !frontRef.current || !backRef.current) return;
@@ -120,8 +172,9 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
                 <CardTitle className="text-xl font-bold">{card.name}</CardTitle>
                 <CardDescription className="text-sm text-gray-500">{card.issuer}</CardDescription>
               </div>
-              <div className="p-2 rounded-full bg-blue-50">
-                <CreditCardIcon className="h-6 w-6 text-blue-600" />
+              <div className="p-2 rounded-md bg-blue-50 flex items-center h-[54px] w-[92px]">
+                {/* Realistic card image or fallback placeholder */}
+                {renderCardImage(false)}
               </div>
             </div>
           </CardHeader>
@@ -205,8 +258,16 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
       >
         <Card className="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-800 text-white shadow-lg overflow-hidden flex flex-col">
           <CardHeader>
-            <CardTitle className="text-xl">{card.name}</CardTitle>
-            <CardDescription className="text-blue-100">{card.issuer}</CardDescription>
+            <div className="flex justify-between items-start">
+              <div>
+                <CardTitle className="text-xl">{card.name}</CardTitle>
+                <CardDescription className="text-blue-100">{card.issuer}</CardDescription>
+              </div>
+              <div className="rounded-md bg-blue-900 flex items-center h-[54px] w-[92px]">
+                {/* Backside image or fallback */}
+                {renderCardImage(true)}
+              </div>
+            </div>
           </CardHeader>
           
           <ScrollArea className="flex-1 overflow-auto">

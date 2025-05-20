@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ThemeSelector } from './theme/ThemeSelector';
+import ThemeToggle from './ui/ThemeToggle';
 
 const Header = () => {
   return (
@@ -32,9 +32,7 @@ const Header = () => {
                 Education
               </Link>
             </li>
-            <li>
-              <ThemeSelector />
-            </li>
+            <ThemeToggle />
           </ul>
         </nav>
       </div>
