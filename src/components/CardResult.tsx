@@ -26,19 +26,10 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
   const backRef = useRef<HTMLDivElement>(null);
   const isFlipped = useRef(false);
 
-  // NEW: For tracking fallback
-  const [imgError, setImgError] = useState(false);
-  const [backImgError, setBackImgError] = useState(false);
-  const [theme, setTheme] = useState(
+  // Strict theme type
+  const [theme, setTheme] = useState<'light' | 'dark'>(
     document.documentElement.classList.contains('dark') ? 'dark' : 'light'
   );
-  useEffect(() => {
-    const docEl = document.documentElement;
-    const updateTheme = () => setTheme(docEl.classList.contains('dark') ? 'dark' : 'light');
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(docEl, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
 
   // Entry animation
   useEffect(() => {
@@ -92,12 +83,13 @@ const CardResult = ({ card, index = 0 }: CardResultProps) => {
   }, [index]);
 
   // Helper for fallback to realistic placeholder
-  const renderCardImage = (isBack = false) => {
-    const imageUrl = !isBack
-      ? card.image_url
-      : card.back_image_url || card.image_url;
+  const [imgError, setImgError] = useState(false);
+  const [backImgError, setBackImgError] = useState(false);
 
-    // If no image or error, show placeholder
+  const renderCardImage = (isBack = false) => {
+    // Only use card.image_url, as that's the only available prop
+    const imageUrl = card.image_url;
+
     if (!imageUrl || (isBack ? backImgError : imgError)) {
       return (
         <PlaceholderCardImage
