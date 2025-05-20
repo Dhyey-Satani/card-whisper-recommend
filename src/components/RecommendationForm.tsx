@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
@@ -101,9 +100,7 @@ const RecommendationForm = ({
                 step={10}
                 onValueChange={values => handleCreditScoreChange(values[0])}
                 className="py-4"
-                thumbProps={{
-                  ref: sliderThumbRef
-                }}
+                thumbRef={sliderThumbRef}
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>Poor (300)</span>
